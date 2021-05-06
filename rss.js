@@ -4,7 +4,7 @@
 // Presenting back to the server the data it needs to act as a foreign wiki server.
 
 
-import { deserializeFeed } from 'https://deno.land/x/rss/mod.ts'
+import { deserializeFeed } from 'https://deno.land/x/rss@0.3.3/mod.ts'
 import miniSearch from 'https://cdn.skypack.dev/minisearch'
 
 let lastUpdate
@@ -134,7 +134,7 @@ export async function rssWikiConstructor(spec) {
 
   let { sitemap, siteIndex, pageData, lastBuildDate } = await fetchAndExtract(feedURL)
 
-  console.log('Last update:', lastUpdate)
+  console.log('Last update:', lastBuildDate)
 
   return {
     sitemap,
