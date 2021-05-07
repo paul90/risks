@@ -5,7 +5,7 @@
 
 
 import { deserializeFeed } from 'https://deno.land/x/rss@0.3.3/mod.ts'
-import miniSearch from 'https://cdn.skypack.dev/minisearch'
+import miniSearch from 'https://cdn.skypack.dev/minisearch@3.0.2'
 
 let lastUpdate
 
