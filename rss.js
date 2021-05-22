@@ -4,7 +4,7 @@
 // Presenting back to the server the data it needs to act as a foreign wiki server.
 
 
-import { deserializeFeed } from 'https://deno.land/x/rss@0.3.3/mod.ts'
+import { deserializeFeed } from 'https://deno.land/x/rss@0.3.4/mod.ts'
 import miniSearch from 'https://cdn.skypack.dev/minisearch@3.0.2'
 
 let lastUpdate
