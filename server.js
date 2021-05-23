@@ -5,23 +5,27 @@ const risksDigestRSS = "http://catless.ncl.ac.uk/risksrss2.xml"
 
 const rssWiki = await rssWikiConstructor({feedURL: risksDigestRSS})
 
+let lastUpdate = rssWiki.lastUpdate
 let lastBuildDate = Date.now()
+console.log('last update', lastUpdate, lastBuildDate)
 
 const defaultRoutes = {
   "/favicon.ico": flag,
   "/favicon.png": flag,
   "/system/sitemap.json": sitemap,
-  "/system/site-index.json": siteindex
+  "/system/site-index.json": siteindex,
+  "/welcome-visitors.json": welcome
 }
 
 let routes = defaultRoutes
 
 // add pages to the available routes
 rssWiki.sitemap.forEach((p) => {
-  routes['/'+p.slug+'.json'] = page
+  // ignore welcome-vistors
+  if ( p.slug != 'welcome-visitors') {
+    routes['/'+p.slug+'.json'] = page
+  }
 })
-
-
 
 const headers = {
   "content-type": "application/json",
@@ -38,6 +42,7 @@ function handle(request) {
     return routes[pathname](pathname)
   } catch (err) {
     console.log(pathname)
+    console.log(routes)
     console.log(err)
     return new Response(`<pre>${err}</pre>`, {status:500})
   }
@@ -46,9 +51,12 @@ function handle(request) {
 function flag() {
   let text = `<svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="g1" cx="50%" cy="50%" r="70%" fx="20%" fy="90%">
-      <stop offset="0%" stop-color="tomato" />
-      <stop offset="100%" stop-color="cornflowerblue" />
+    <radialGradient id="g1" cx="30%" cy="20%" r="80%" fx="50%" fy="80%">
+      <stop offset="0%" stop-color="midnightblue" />
+      <stop offset="30%" stop-color="green" />
+      <stop offset="60%" stop-color="darkred" />
+      <stop offset="70%" stop-color="teal" />
+      <stop offset="100%" stop-color="lavender" />
     </radialGradient>
   </defs>
   <rect cx="0%" cy="0%" fx="90%" fy="90%" width="32" height="32" fill="url(#g1)"/>
@@ -62,6 +70,12 @@ function sitemap() {
 
 function siteindex() {
   return new Response(JSON.stringify(rssWiki.siteIndex), { headers })
+}
+
+async function welcome() {
+  const welcomeURL = new URL("welcome-visitors.json", import.meta.url)
+  const response = await fetch(welcomeURL)
+  return new Response(response.body, { ...response, headers })
 }
 
 function page(pathname) {

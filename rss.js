@@ -52,7 +52,7 @@ async function fetchAndExtract(url) {
       return response
     })
     .then(response => {
-      lastUpdate = new Date(response.headers['last-modified'])
+      lastUpdate = Date.parse(response.headers.get('last-modified'))
       return response
     })
     .then(response => response.text())
@@ -69,7 +69,15 @@ async function fetchAndExtract(url) {
       lastBuildDate = Date.parse(channel.lastBuildDate)
       addPage({
         title: title,
-        story: [ channel.description, `Content created from [${channel.link} ${channel.link}]` ],
+        story: [ channel.description, `Content created from The Risks Digest [${channel.link} ${channel.link}]` ],
+        created: {
+          date: lastBuildDate
+        }
+      })
+      // also add a fake welcome visitors
+      addPage({
+        title: 'Welcome Visitors',
+        story: [ 'Welcome to this [[Federated Wiki]] site. From this page you can find who we are and what we do. New sites provide this information and then claim the site as their own. You will need your own site to participate.' ], 
         created: {
           date: lastBuildDate
         }
@@ -134,12 +142,10 @@ export async function rssWikiConstructor(spec) {
 
   let { sitemap, siteIndex, pageData, lastBuildDate } = await fetchAndExtract(feedURL)
 
-  console.log('Last update:', lastBuildDate)
-
   return {
     sitemap,
     siteIndex,
     pageData,
-    lastBuildDate
+    lastUpdate
   }
 }
