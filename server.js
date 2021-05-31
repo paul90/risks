@@ -6,8 +6,6 @@ const risksDigestRSS = "http://catless.ncl.ac.uk/risksrss2.xml"
 const rssWiki = await rssWikiConstructor({feedURL: risksDigestRSS})
 
 let lastUpdate = rssWiki.lastUpdate
-let lastBuildDate = Date.now()
-console.log('last update', lastUpdate, lastBuildDate)
 
 const defaultRoutes = {
   "/favicon.ico": flag,
@@ -41,9 +39,7 @@ function handle(request) {
   try {
     return routes[pathname](pathname)
   } catch (err) {
-    console.log(pathname)
-    console.log(routes)
-    console.log(err)
+    console.log(err, pathname)
     return new Response(`<pre>${err}</pre>`, {status:500})
   }
 }
@@ -51,13 +47,11 @@ function handle(request) {
 function flag() {
   let text = `<svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="g1" cx="30%" cy="20%" r="80%" fx="50%" fy="80%">
-      <stop offset="0%" stop-color="midnightblue" />
-      <stop offset="30%" stop-color="green" />
-      <stop offset="60%" stop-color="darkred" />
-      <stop offset="70%" stop-color="teal" />
+    <linearGradient id="g1" gradientTransform="rotate(120)">
+      <stop offset="20%" stop-color="midnightblue" />
+      <stop offset="60%" stop-color="teal" />
       <stop offset="100%" stop-color="lavender" />
-    </radialGradient>
+    </linearGradient>
   </defs>
   <rect cx="0%" cy="0%" fx="90%" fy="90%" width="32" height="32" fill="url(#g1)"/>
  </svg>`
