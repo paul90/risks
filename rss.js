@@ -149,7 +149,6 @@ export async function rssWikiConstructor(spec) {
   // but first worth keeping an eye on if deploy is restarting frequently enough not to need worry about refresh
   async function refresh() {
     if (Date.now() < lastBuildDate + refreshInterval) {
-      console.log('not time yet!')
       return
     } else {
       console.log('refreshing content')
