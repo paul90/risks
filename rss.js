@@ -25,6 +25,11 @@ async function fetchAndExtract(url) {
 
     const slug = title.replace(/\s/g, '-').replace(/[^A-Za-z0-9-]/g, '').toLowerCase()
 
+    if (pageData.has(slug)) {
+      console.log('ignoring duplicate title')
+      return
+    }
+
     pageData.set(slug, {
       title,
       story,
