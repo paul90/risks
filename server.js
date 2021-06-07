@@ -6,13 +6,15 @@ const risksDigestRSS = "http://catless.ncl.ac.uk/risksrss2.xml"
 const rssWiki = await rssWikiConstructor({feedURL: risksDigestRSS})
 
 let lastUpdate = rssWiki.lastUpdate
+let lastCheck = Date.now()
 
 const defaultRoutes = {
   "/favicon.ico": flag,
   "/favicon.png": flag,
   "/system/sitemap.json": sitemap,
   "/system/site-index.json": siteindex,
-  "/welcome-visitors.json": welcome
+  "/welcome-visitors.json": welcome,
+  "/": index
 }
 
 let routes = defaultRoutes
@@ -33,14 +35,16 @@ const headers = {
 addEventListener("fetch", (event) => event.respondWith(handle(event.request)))
 
 function handle(request) {
+  // time to refresh?
+  rssWiki.refresh()
 
   let { pathname, search, origin } = new URL(request.url)
 
   try {
     return routes[pathname](pathname)
   } catch (err) {
-    console.log(err, pathname)
-    return new Response(`<pre>${err}</pre>`, {status:500})
+    console.log(err.message, pathname)
+    return new Response('Not Found', {status:404})
   }
 }
 
@@ -70,6 +74,24 @@ async function welcome() {
   const welcomeURL = new URL("welcome-visitors.json", import.meta.url)
   const response = await fetch(welcomeURL)
   return new Response(response.body, { ...response, headers })
+}
+
+function index() {
+  return new Response(
+    `<html>
+      <head>
+        <title>Federated Wiki Foreign Server</title>
+      </head>
+      <body>
+        <p>A Federated Wiki Foreign Server, serving contents from <a href="https://catless.ncl.ac.uk/Risks/">The Risks Digest</a> RSS feed as wiki pages.
+      </body>
+      </html>`,
+      {
+        headers: {
+          "content-type": "text/html; charset=utf-8"
+        }
+      }
+  )
 }
 
 function page(pathname) {

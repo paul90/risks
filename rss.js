@@ -7,8 +7,7 @@
 import { deserializeFeed } from 'https://deno.land/x/rss@0.3.4/mod.ts'
 import miniSearch from 'https://cdn.skypack.dev/minisearch@3.0.2'
 
-const refreshInterval = 3600000   // 1 hour
-
+const refreshInterval = 43200000   // 12 hours
 
 let lastUpdate
 
@@ -148,11 +147,23 @@ export async function rssWikiConstructor(spec) {
 
   // need to add a refresh function
   // but first worth keeping an eye on if deploy is restarting frequently enough not to need worry about refresh
+  async function refresh() {
+    if (Date.now() < lastBuildDate + refreshInterval) {
+      console.log('not time yet!')
+      return
+    } else {
+      console.log('refreshing content')
+      let { sitemap, siteIndex, pageData, lastUpdate } = await fetchAndExtract(feedURL)
+      lastBuildDate = Date.now()
+      return
+    }
+  }
 
   return Object.freeze({
     get sitemap () { return sitemap },
     get siteIndex () { return siteIndex },
     get pageData () { return pageData },
-    get lastUpdate () { return lastUpdate}
+    get lastUpdate () { return lastUpdate},
+    refresh
   })
 }
