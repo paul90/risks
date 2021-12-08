@@ -4,7 +4,7 @@
 // Presenting back to the server the data it needs to act as a foreign wiki server.
 
 
-import { parseFeed } from 'https://deno.land/x/rss/mod.ts'
+import { deserializeFeed } from 'https://deno.land/x/rss@0.3.4/mod.ts'
 import miniSearch from 'https://cdn.skypack.dev/minisearch@3.1.0'
 
 const refreshInterval = 43200000   // 12 hours
@@ -64,10 +64,9 @@ async function fetchAndExtract(url) {
     })
     .then(response => response.text())
     .then(str => {
-      return parseFeed(str)
+      return deserializeFeed(str)
     })
     .then(deserialized => {
-      console.log(deserialized)
       const { feed /* , feedType */  } = deserialized
       return feed
     })
@@ -156,7 +155,7 @@ export async function rssWikiConstructor(spec) {
   async function refresh() {
     console.info('refresh called', lastBuildDate, refreshInterval, Date.now())
     if (Date.now() < lastBuildDate + refreshInterval) {
-      console.info('refrest not needed')
+      console.info('refresh not needed')
       return
     } else {
       console.log('refreshing content')
