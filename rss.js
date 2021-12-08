@@ -71,6 +71,7 @@ async function fetchAndExtract(url) {
       return feed
     })
     .then(feed => {
+      console.log(feed)
       const { channel } = feed
       const { title, description } = channel
       lastBuildDate = Date.parse(channel.lastBuildDate)
