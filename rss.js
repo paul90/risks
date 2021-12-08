@@ -4,7 +4,7 @@
 // Presenting back to the server the data it needs to act as a foreign wiki server.
 
 
-import { parseFeed } from 'https://deno.land/x/rss@0.5.3/mod.ts'
+import { parseFeed } from 'https://deno.land/x/rss/mod.ts'
 import miniSearch from 'https://cdn.skypack.dev/minisearch@3.1.0'
 
 const refreshInterval = 43200000   // 12 hours
