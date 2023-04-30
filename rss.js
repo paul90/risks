@@ -5,7 +5,7 @@
 
 
 import { deserializeFeed } from 'https://deno.land/x/rss@0.3.4/mod.ts'
-import miniSearch from 'https://cdn.skypack.dev/minisearch@3.1.0'
+import miniSearch from 'https://cdn.skypack.dev/minisearch@6.0.1'
 
 const refreshInterval = 43200000   // 12 hours
 

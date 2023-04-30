@@ -63,11 +63,15 @@ function flag() {
 }
 
 function sitemap() {
-  return new Response(JSON.stringify(rssWiki.sitemap,null,2), { headers })
+  let myHeaders = headers
+  myHeaders['Last-Modified'] = (new Date(lastUpdate)).toUTCString()
+  return new Response(JSON.stringify(rssWiki.sitemap,null,2), { myHeaders })
 }
 
 function siteindex() {
-  return new Response(JSON.stringify(rssWiki.siteIndex), { headers })
+  let myHeaders = headers
+  myHeaders['Last-Modified'] = (new Date(lastUpdate)).toUTCString()
+  return new Response(JSON.stringify(rssWiki.siteIndex), { myHeaders })
 }
 
 async function welcome() {
