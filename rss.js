@@ -20,7 +20,7 @@ async function fetchAndExtract(url) {
   })
 
   function addPage(spec) {
-
+    console.log('*** addPage : ', spec)
     const { title, story, created } = spec
 
     const slug = title.replace(/\s/g, '-').replace(/[^A-Za-z0-9-]/g, '').toLowerCase()
