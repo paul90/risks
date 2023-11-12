@@ -6,6 +6,7 @@ const risksDigestRSS = "http://catless.ncl.ac.uk/risksrss2.xml"
 const rssWiki = await rssWikiConstructor({feedURL: risksDigestRSS})
 
 let lastUpdate = rssWiki.lastUpdate
+console.log('last update:', lastUpdate)
 let lastCheck = Date.now()
 
 const defaultRoutes = {
